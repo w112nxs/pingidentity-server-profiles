@@ -5,12 +5,12 @@
 #
 
 #Minimum heap size
--Xms512m
+-Xms128m
 #Maximum heap size
--Xmx512m
+-Xmx256m
 #Minimum size for the Young Gen space
--XX:NewSize=256m
+-XX:NewSize=128m
 #Maximum size for the Young Gen space
--XX:MaxNewSize=256m
+-XX:MaxNewSize=128m
 #Use the parallel garbage collector
--XX:+UseParallelGC
+-XX:+UseParallelGC -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
