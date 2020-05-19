@@ -92,6 +92,18 @@ dsconfig create-access-token-validator \
     --set evaluation-order-index:1 
 
 dsconfig create-token-resource-lookup-method \
+	--validator-name mock-atv \
+	--method-name scim-entry-uuid \
+	--type scim \
+	--set evaluation-order-index:9999 \
+	--set scim-resource-type:Users \
+	--set 'match-filter:userName eq "%sub%"'
+    
+dsconfig set-http-servlet-extension-prop \
+	--extension-name SCIM2 \
+	--set access-token-validator:mock-atv
+
+dsconfig create-token-resource-lookup-method \
     --validator-name mock-atv  \
     --method-name users-by-uid  \
     --type scim  \
@@ -108,7 +120,14 @@ dsconfig create-gateway-api-endpoint \
 dsconfig set-policy-decision-service-prop \
     --set pdp-mode:embedded  \
     --set "deployment-package<${SERVER_ROOT_DIR}/resource/simple.SDP" 
-    
-# dsconfig set-http-servlet-cross-origin-policy-prop \
-#    --policy-name development-cross-origin-policy  \
-#    --set cors-allowed-origins:* 
+
+dsconfig create-external-server \
+	--server-name pingdatagovernancepap \
+	--type policy \
+	--set base-url:https://pingdatagovernancepap:8443 \
+	--set hostname-verification-method:allow-all \
+	--set key-manager-provider:Null \
+	--set "trust-manager-provider:Blind Trust" \
+	--set shared-secret:2FederateM0re \
+	--set decision-node:e51688ff-1dc9-4b6c-bb36-8af64d02e9d1 \
+	--set branch:defaultPolicies.SNAPSHOT
